@@ -13,12 +13,12 @@ pip install wiqaya
 ```python
 from wiqaya import Wiqaya
 
-w = Wiqaya(lang="ar")
+w = Wiqaya(lang="en")
 
-w.is_profane("هذا نص عادي")       # False
-w.is_profane("نص يحتوي شتيمة")    # True
+w.is_profane("damn")        # True
+w.is_profane("Hello World") # False
+w.get_profane_words("this is damn annoying") # ['damn']
 
-w.get_profane_words("نص فيه كلمة سيئة")  # ['كلمة سيئة']
 ```
 
 ## Supported Languages
