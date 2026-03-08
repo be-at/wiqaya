@@ -22,6 +22,8 @@ w.is_profane("Hello World") # False
 w.get_profane_words("this is damn annoying") # ['damn']
 
 ```
+> [!NOTE]
+> The library automatically removes Arabic diacritics (Tashkeel) when using Arabic language mode
 
 ## Supported Languages
 
