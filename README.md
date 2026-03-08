@@ -1,4 +1,4 @@
-# Wiqaya
+# Wiqaya 🛡️
 
 A Python library for multilingual profanity detection and filtering. It identifies and censors offensive or abusive words across multiple languages.
 
