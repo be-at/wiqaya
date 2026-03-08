@@ -2,7 +2,7 @@ from  pathlib import Path
 from .utils import remove_tashkeel
 
 
-DATA_DIR = Path(__file__).parent.parent.parent / "data"
+DATA_DIR = Path(__file__).parent / "data"
 
 class Wiqaya:
     def __init__(self, lang: str):
