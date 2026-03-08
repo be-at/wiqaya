@@ -5,7 +5,7 @@ description = "A Python library for multilingual profanity detection and filteri
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "tayf", email = "tayf@tuta.io"},
+    {name = "tayf"},
 ]
 requires-python = ">=3.12"
 dependencies = []
