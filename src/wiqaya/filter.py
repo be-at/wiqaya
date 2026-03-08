@@ -1,5 +1,5 @@
 from  pathlib import Path
-
+from .utils import remove_tashkeel
 
 
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
@@ -16,14 +16,23 @@ class Wiqaya:
             raise ValueError(f"Language '{self.lang}' not supported")
 
     def is_profane(self, text) -> bool:
-        words = text.lower().split()
+        words = self._process(text)
         return any(word in self.WORDS for word in words)
 
     def get_profane_words(self, text) -> list[str]:
-        words = text.lower().split()
+        words = self._process(text)
         return [word for word in words if word in self.WORDS]
 
+    def censor(self, text: str, char: str = "*") -> str:
+        words = self._process(text)
+        for word in words:
+            if word in self.WORDS:
+                text = text.replace(word, char * len(word))
+        return text
+
+    def _process(self, text: str) -> list[str]:
+        if self.lang == "ar":
+            text = remove_tashkeel(text)
+        return text.lower().split()
 
 
-t = Wiqaya("ar").get_profane_words("اهلا بك يا بزاز")
-print(t)
