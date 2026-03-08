@@ -1,32 +1,44 @@
-from  pathlib import Path
+from pathlib import Path
 from .utils import remove_tashkeel
-
+import re
 
 DATA_DIR = Path(__file__).parent / "data"
 
 class Wiqaya:
     def __init__(self, lang: str):
         self.lang = lang
-
         try:
             with open(f"{DATA_DIR}/{self.lang}.txt", "r", encoding="utf-8") as f:
-                self.WORDS = set(line.strip() for line in f)
-
+                lines = [line.strip() for line in f if line.strip()]
         except FileNotFoundError:
             raise ValueError(f"Language '{self.lang}' not supported")
 
+        self.WORDS = set()
+        self._patterns = []
+
+        for entry in lines:
+            if "*" in entry:
+                # Convert wildcard to regex: *word* → .*word.*, word* → word.*
+                regex = re.escape(entry).replace(r"\*", ".*")
+                self._patterns.append(re.compile(f"^{regex}$"))
+            else:
+                self.WORDS.add(entry)
+
+    def _matches_any_pattern(self, word: str) -> bool:
+        return any(p.match(word) for p in self._patterns)
+
+    def _is_bad(self, word: str) -> bool:
+        return word in self.WORDS or self._matches_any_pattern(word)
+
     def is_profane(self, text) -> bool:
-        words = self._process(text)
-        return any(word in self.WORDS for word in words)
+        return any(self._is_bad(w) for w in self._process(text))
 
     def get_profane_words(self, text) -> list[str]:
-        words = self._process(text)
-        return [word for word in words if word in self.WORDS]
+        return [w for w in self._process(text) if self._is_bad(w)]
 
     def censor(self, text: str, char: str = "*") -> str:
-        words = self._process(text)
-        for word in words:
-            if word in self.WORDS:
+        for word in self._process(text):
+            if self._is_bad(word):
                 text = text.replace(word, char * len(word))
         return text
 
@@ -34,5 +46,3 @@ class Wiqaya:
         if self.lang == "ar":
             text = remove_tashkeel(text)
         return text.lower().split()
-
-

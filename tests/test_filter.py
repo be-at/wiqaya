@@ -56,3 +56,20 @@ def test_invalid_lang():
     import pytest
     with pytest.raises(ValueError):
         Wiqaya(lang="xx")
+
+
+def test_wildcard_support():
+    w = Wiqaya(lang="en")
+
+    # is_profane
+    assert w.is_profane("wwsfuck")    == True 
+    assert w.is_profane("fuckwedf")   == True 
+    assert w.is_profane("wd+wfucked+") == True
+
+
+    # get_profane_words
+    assert w.get_profane_words("hello fsdfuckwwq clean") == ["fsdfuckwwq"]
+
+    # censor
+    assert w.censor("hello dsfuckw there")    == "hello ******* there"
+    assert w.censor("dsfuckw ffdamn", char="#") == "####### ######"
