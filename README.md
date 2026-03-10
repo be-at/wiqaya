@@ -25,6 +25,9 @@ w.get_profane_words("this is damn annoying") # ['damn']
 > [!NOTE]
 > The library automatically removes Arabic diacritics (Tashkeel) when using Arabic language mode
 
+> [!TIP]
+> Wildcard patterns are supported in word lists — use `*` to match any sequence of characters (e.g., `bad*` matches `badly`, `*word*` matches anything containing `word`)
+
 ## Supported Languages
 
 | Code | Language | Code | Language | Code | Language |
