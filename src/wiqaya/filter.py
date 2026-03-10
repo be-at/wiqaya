@@ -43,6 +43,7 @@ class Wiqaya:
         return text
 
     def _process(self, text: str) -> list[str]:
+        # حذف التشكيل من الكلمات العربية لتجنب التحايل
         if self.lang == "ar":
             text = remove_tashkeel(text)
         return text.lower().split()
