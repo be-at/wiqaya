@@ -1,12 +1,6 @@
 name: Publish to PyPI
-
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (e.g. 1.0.0)'
-        required: true
-        type: string
 
 jobs:
   publish:
@@ -15,11 +9,15 @@ jobs:
     permissions:
       id-token: write
       contents: write
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: astral-sh/setup-uv@v5
+
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(python -c "import tomllib; data=tomllib.load(open('pyproject.toml','rb')); print(data['project']['version'])")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build
         run: uv build
@@ -27,8 +25,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          name: v${{ github.event.inputs.version }}
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: v${{ steps.get_version.outputs.version }}
           generate_release_notes: true
 
       - name: Publish to PyPI
