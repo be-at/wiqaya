@@ -1,5 +1,4 @@
 name: Release
-
 on:
   workflow_dispatch:
 
@@ -12,6 +11,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: astral-sh/setup-uv@v5
 
       - name: Get version from pyproject.toml
@@ -29,4 +29,6 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: v${{ steps.get_version.outputs.version }}
           generate_release_notes: true
-          draft: false
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
